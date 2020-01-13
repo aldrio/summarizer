@@ -60,22 +60,22 @@ def summarize():
         if main_text is None or len(main_text) < len(paragraphs):
             main_text = paragraphs
 
-    text = ''
+    paragraphs = []
     for paragraph in main_text:
 
-        p = paragraph.get_text()
-        p = re.sub(r'\n\s*\n', r'\n\n', p.strip(), flags=re.M)
+        p = paragraph.get_text().strip()
+        # collapse all multiple whitespaces to a single space
+        p = re.sub(r'\s\s+', r' ', p, flags=re.M)
 
         # ensure the line ends with a punctuation
         m = re.search(r'\w$', p)
         if m is not None:
             p += '.'
 
-        text += p + ' '
+        paragraphs.append(p)
 
     return jsonify(
-        original=text,
-        summary=summarizer.summarize(text),
+        summary=summarizer.summarize(paragraphs),
         title=title,
         image=image,
     )

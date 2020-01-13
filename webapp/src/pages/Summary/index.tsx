@@ -3,15 +3,26 @@ import styles from './styles'
 import { useParams } from 'react-router-dom'
 import { Content } from 'components/Content'
 
+type Data =
+  | {
+      loading: true
+    }
+  | {
+      loading: false
+      error: string
+    }
+  | {
+      loading: false
+      error: null
+      summary: string[][]
+      title: string
+      image?: string
+    }
 type Props = {}
 export const Summary: React.FC<Props> = () => {
   const { url } = useParams()
-  const [data, setData] = useState({
+  const [data, setData] = useState<Data>({
     loading: true,
-    error: null,
-    summary: null,
-    title: null,
-    image: null,
   })
 
   // Query url from api
@@ -28,13 +39,12 @@ export const Summary: React.FC<Props> = () => {
         }
         const data = await res.json()
         setData({
-          ...data,
           loading: false,
           error: null,
+          ...data,
         })
       } catch (error) {
         setData({
-          ...data,
           loading: false,
           error: error.message,
         })
@@ -45,14 +55,16 @@ export const Summary: React.FC<Props> = () => {
   let body
   if (data.loading) {
     body = 'Loading'
-  } else if (data.error) {
+  } else if (data.error != null) {
     body = `${data.error}`
   } else {
     body = (
       <>
         <h1>{data.title}</h1>
         <img src={data.image || undefined} />
-        <p css={styles.content}>{data.summary}</p>
+        {data.summary.map((p) => (
+          <p css={styles.content}>{p.join(' ')}</p>
+        ))}
       </>
     )
   }

@@ -71,9 +71,11 @@ def _score_doc(doc, tf_matrix, idf_matrix):
     return score
 
 
-def summarize(text):
-    sentences = nltk.tokenize.sent_tokenize(text)
-    docs = [_tokenize_document(sentence) for sentence in sentences]
+def summarize(paragraphs):
+    paragraphs = [nltk.tokenize.sent_tokenize(p) for p in paragraphs]
+    sentences = [s for p in paragraphs for s in p]
+
+    docs = [_tokenize_document(s) for s in sentences]
 
     tf_matrices = [_create_tf_matrix(doc) for doc in docs]
     idf_matrix = _create_idf_matrix(tf_matrices)
@@ -90,13 +92,18 @@ def summarize(text):
             docs,
             tf_matrices
         )]
-
     sorted_scores = sorted(scores, reverse=True)
-    threshold = sorted_scores[max(2, min(6, math.floor(len(scores) / 4)))]
+    threshold = sorted_scores[max(2, min(5, math.floor(len(scores) / 4)))]
 
-    summary = ''
-    for (i, sentence) in enumerate(sentences):
-        if scores[i] >= threshold:
-            summary += sentence + ' '
+    summary = []
+    p_stop = 0
+    for paragraph in paragraphs:
+        p_summary = []
+        p_start = p_stop
+        p_stop = p_start + len(paragraph)
+        for (i, sentence) in enumerate(sentences[p_start:p_stop]):
+            if scores[i + p_start] >= threshold:
+                p_summary.append(sentence)
+        summary.append(p_summary)
 
-    return summary
+    return list(filter(lambda p: len(p) != 0, summary))
