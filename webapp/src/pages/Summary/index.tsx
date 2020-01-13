@@ -14,9 +14,12 @@ type Data =
   | {
       loading: false
       error: null
-      summary: string[][]
+
+      url: string
       title: string
+      summary: string[][]
       image?: string
+      icon: string
     }
 type Props = {}
 export const Summary: React.FC<Props> = () => {
@@ -60,6 +63,12 @@ export const Summary: React.FC<Props> = () => {
   } else {
     body = (
       <>
+        <div css={styles.info}>
+          <a css={styles.urlLink} href={data.url} >
+            <img src={data.icon} css={styles.icon} />
+            <span css={styles.domain}>{new URL(data.url).hostname.replace(/^www\./i, '')}</span>
+          </a>
+        </div>
         <h1>{data.title}</h1>
         <img src={data.image || undefined} />
         {data.summary.map((p) => (

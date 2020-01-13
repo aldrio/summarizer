@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 import re
 from . import summarizer
+import favicon
 
 
 application = Flask(__name__)
@@ -13,13 +14,15 @@ CORS(application)
 @application.route('/summarize')
 def summarize():
     url = request.args.get('url', '')
-    url = 'http://' + url.strip('http://').strip('https://')
-
+    url = 'https://' + url.strip('http://').strip('https://')
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+    }
     # Download page
-    res = requests.get(url, timeout=5, stream=True)
+    res = requests.get(url, timeout=5, stream=True, headers=headers)
 
     if res.status_code != 200:
-        raise Exception('bad response from website')
+        raise Exception(f'bad response from website {res.status_code}')
     if not res.headers['content-type'].startswith('text/html'):
         raise Exception('bad content-type')
 
@@ -74,10 +77,15 @@ def summarize():
 
         paragraphs.append(p)
 
+    # Get favicon
+    icons = favicon.get(url)
+
     return jsonify(
         summary=summarizer.summarize(paragraphs),
+        url=url,
         title=title,
         image=image,
+        icon=icons[0].url
     )
 
 
