@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styles from './styles'
 import { useParams, Link } from 'react-router-dom'
 import { Content } from 'components/Content'
+import { HashLoader } from 'react-spinners'
 
 type Data =
   | {
@@ -57,16 +58,22 @@ export const Summary: React.FC<Props> = () => {
 
   let body
   if (data.loading) {
-    body = 'Loading'
+    body = (
+      <div css={styles.loading}>
+        <HashLoader size={100} color="#6F6F93" />
+      </div>
+    )
   } else if (data.error != null) {
     body = `${data.error}`
   } else {
     body = (
       <>
         <div css={styles.info}>
-          <a css={styles.urlLink} href={data.url} >
+          <a css={styles.urlLink} href={data.url}>
             <img src={data.icon} css={styles.icon} />
-            <span css={styles.domain}>{new URL(data.url).hostname.replace(/^www\./i, '')}</span>
+            <span css={styles.domain}>
+              {new URL(data.url).hostname.replace(/^www\./i, '')}
+            </span>
           </a>
         </div>
         <h1>{data.title}</h1>
@@ -82,7 +89,11 @@ export const Summary: React.FC<Props> = () => {
     <div css={styles.page}>
       <Content>
         <div css={styles.header}>
-          <h1><Link to="/" css={styles.brand}>Text Summarizer</Link></h1>
+          <h1>
+            <Link to="/" css={styles.brand}>
+              Text Summarizer
+            </Link>
+          </h1>
         </div>
         {body}
       </Content>

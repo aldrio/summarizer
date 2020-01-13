@@ -56,4 +56,12 @@ export default {
     paddingLeft: 12,
     paddingRight: 8,
   }),
+
+  loading: css({
+    display: 'flex',
+    paddingTop: '20vh',
+    paddingBottom: '20vh',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }),
 }
