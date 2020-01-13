@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import styles from './styles'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { Content } from 'components/Content'
+import { Logo } from 'components/Logo'
 
 type Props = {}
 export const Frontpage: React.FC<Props> = () => {
@@ -10,7 +11,10 @@ export const Frontpage: React.FC<Props> = () => {
 
   return (
     <div css={styles.background}>
-      <h1 css={styles.title}>Text Summarizer</h1>
+      <Link to="/" css={styles.title.container}>
+        <Logo width={75} height={75} /> 
+        <h1 css={styles.title.text}>Text Summarizer</h1>
+      </Link>
       <Content>
         <div css={styles.search.wrapper}>
           <div

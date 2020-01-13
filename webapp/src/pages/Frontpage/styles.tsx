@@ -8,7 +8,7 @@ export default {
     backgroundColor: '#fff',
     paddingTop: 12,
     paddingBottom: 100,
-    
+
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -22,11 +22,21 @@ export default {
     alignItems: 'center',
   }),
 
-  title: css({
-    textAlign: 'center',
-    fontSize: '3rem',
-    marginBottom: '2.5rem',
-  }),
+  title: {
+    container: css({
+      textDecoration: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      textAlign: 'center',
+      marginBottom: '2.5rem',
+    }),
+    text: css({
+      margin: 0,
+      marginLeft: 24,
+      fontSize: '3rem',
+      color: '#000',
+    }),
+  },
 
   search: {
     wrapper: css({

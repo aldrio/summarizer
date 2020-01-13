@@ -15,12 +15,20 @@ export default {
     marginBottom: 70,
   }),
 
-  brand: css({
-    textAlign: 'center',
-    fontSize: '1rem',
-    textDecoration: 'none',
-    color: '#373657',
-  }),
+  brand: {
+    container: css({
+      textDecoration: 'none',
+      display: 'inline-flex',
+      alignItems: 'center',
+      marginTop: 12,
+    }),
+    text: css({
+      margin: 0,
+      marginLeft: 8,
+      fontSize: '1rem',
+      color: '#373657',
+    })
+  },
 
   content: css({
     textAlign: 'justify',

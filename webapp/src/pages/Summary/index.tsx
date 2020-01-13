@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom'
 import { Content } from 'components/Content'
 import { HashLoader } from 'react-spinners'
 import FadeIn from 'react-fade-in'
+import { Logo } from 'components/Logo'
 
 type Data =
   | {
@@ -92,11 +93,10 @@ export const Summary: React.FC<Props> = () => {
     <div css={styles.page}>
       <Content>
         <div css={styles.header}>
-          <h1>
-            <Link to="/" css={styles.brand}>
-              Text Summarizer
-            </Link>
-          </h1>
+          <Link to="/" css={styles.brand.container}>
+            <Logo width={'1rem'} height={'1rem'} />
+            <h1 css={styles.brand.text}>Text Summarizer</h1>
+          </Link>
         </div>
         {body}
       </Content>
