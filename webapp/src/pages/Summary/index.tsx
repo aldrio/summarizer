@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styles from './styles'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { Content } from 'components/Content'
 
 type Data =
@@ -80,7 +80,12 @@ export const Summary: React.FC<Props> = () => {
 
   return (
     <div css={styles.page}>
-      <Content>{body}</Content>
+      <Content>
+        <div css={styles.header}>
+          <h1><Link to="/" css={styles.brand}>Text Summarizer</Link></h1>
+        </div>
+        {body}
+      </Content>
     </div>
   )
 }

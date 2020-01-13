@@ -7,8 +7,19 @@ export default {
     display: 'flex',
     backgroundColor: '#fff',
     flexDirection: 'row',
-    paddingTop: 76,
     paddingBottom: 100,
+  }),
+
+  header: css({
+    textAlign: 'center',
+    marginBottom: 70,
+  }),
+
+  brand: css({
+    textAlign: 'center',
+    fontSize: '1rem',
+    textDecoration: 'none',
+    color: '#373657',
   }),
 
   content: css({
@@ -38,7 +49,7 @@ export default {
     height: '1.25rem',
     width: '1.25rem',
   }),
-  
+
   domain: css({
     display: 'inline',
     fontWeight: 'bold',
