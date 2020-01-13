@@ -3,6 +3,7 @@ import styles from './styles'
 import { useParams, Link } from 'react-router-dom'
 import { Content } from 'components/Content'
 import { HashLoader } from 'react-spinners'
+import FadeIn from 'react-fade-in'
 
 type Data =
   | {
@@ -60,14 +61,16 @@ export const Summary: React.FC<Props> = () => {
   if (data.loading) {
     body = (
       <div css={styles.loading}>
-        <HashLoader size={100} color="#6F6F93" />
+        <FadeIn>
+          <HashLoader size={100} color="#6F6F93" />
+        </FadeIn>
       </div>
     )
   } else if (data.error != null) {
     body = `${data.error}`
   } else {
     body = (
-      <>
+      <FadeIn>
         <div css={styles.info}>
           <a css={styles.urlLink} href={data.url}>
             <img src={data.icon} css={styles.icon} />
@@ -81,7 +84,7 @@ export const Summary: React.FC<Props> = () => {
         {data.summary.map((p) => (
           <p css={styles.content}>{p.join(' ')}</p>
         ))}
-      </>
+      </FadeIn>
     )
   }
 
