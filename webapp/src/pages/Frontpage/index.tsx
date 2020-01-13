@@ -10,22 +10,34 @@ export const Frontpage: React.FC<Props> = () => {
 
   return (
     <div css={styles.background}>
+      <h1 css={styles.title}>Text Summarizer</h1>
       <Content>
-        <h1>Summarizer</h1>
-        <input
-          type="text"
-          placeholder="URL"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
-        <button
-          onClick={() => {
-            const norm = url.replace(/^https?:\/\//i, '')
-            history.push(`/s/${norm}`)
-          }}
-        >
-          Go
-        </button>
+        <div css={styles.search.wrapper}>
+          <div
+            css={styles.search.container}
+            style={{
+              minWidth: `${Math.min(100, 50 + url.length * 3)}%`,
+            }}
+          >
+            <input
+              type="text"
+              placeholder="URL"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              css={styles.search.input}
+              size={1}
+            />
+            <button
+              css={styles.search.button}
+              onClick={() => {
+                const norm = url.replace(/^https?:\/\//i, '')
+                history.push(`/s/${norm}`)
+              }}
+            >
+              Summarize
+            </button>
+          </div>
+        </div> 
       </Content>
     </div>
   )
