@@ -68,7 +68,7 @@ def _score_doc(doc, tf_matrix, idf_matrix):
     for word in doc:
         score += _word_tf_idf(word, tf_matrix, idf_matrix)
 
-    return score
+    return score / (len(doc) / 2)
 
 
 def summarize(paragraphs):
