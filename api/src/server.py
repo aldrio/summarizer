@@ -3,8 +3,10 @@ from flask_cors import CORS
 from bs4 import BeautifulSoup
 import requests
 import re
-from . import summarizer
 import favicon
+
+from .summarizers import tf_idf
+from .summarizers import sumy
 
 
 application = Flask(__name__)
@@ -62,9 +64,12 @@ def summarize():
     for paragraphs in containers.values():
         if main_text is None or len(main_text) < len(paragraphs):
             main_text = paragraphs
+    main_text = main_text[0].parent
 
+    # Organize content in paragraphs, where headers are in caps at beginning
+    last_header = False
     paragraphs = []
-    for paragraph in main_text:
+    for paragraph in main_text.find_all(['p', 'h1', 'h2', 'h3']):
 
         p = paragraph.get_text().strip()
         # collapse all multiple whitespaces to a single space
@@ -74,14 +79,27 @@ def summarize():
         m = re.search(r'\w$', p)
         if m is not None:
             p += '.'
+        
+        if paragraph.name == 'p':
+            if last_header:
+                paragraphs[-1] += '\n' + p
+            else:
+                paragraphs.append(p)
+            last_header = False
+        else:
+            paragraphs.append(p.upper())
+            last_header = True
 
-        paragraphs.append(p)
+    # Create summarizer
+    # summarizer = tf_idf.TfIdfSummarizer()
+    summarizer = sumy.SumySummarizer()
+    summary = summarizer.summarize(paragraphs)
 
     # Get favicon
     icons = favicon.get(url)
 
     return jsonify(
-        summary=summarizer.summarize(paragraphs),
+        summary=summary,
         url=url,
         title=title,
         image=image,
