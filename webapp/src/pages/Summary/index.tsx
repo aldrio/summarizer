@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import styles from './styles'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useLocation } from 'react-router-dom'
 import { Content } from 'components/Content'
 import { HashLoader } from 'react-spinners'
 import FadeIn from 'react-fade-in'
 import { Logo } from 'components/Logo'
+import { ArticleSummary, Summary as ArticleSummaryType } from './ArticleSummary'
+import { VideoSummary, Summary as VideoSummaryType } from './VideoSummary'
+
+export type SummaryType<T> = {
+  url: string
+  title: string
+  icon: string
+} & T
 
 type Data =
   | {
@@ -17,19 +25,18 @@ type Data =
   | {
       loading: false
       error: null
-
-      url: string
-      title: string
-      summary: string[][]
-      image?: string
-      icon: string
+      summary: SummaryType<ArticleSummaryType> | SummaryType<VideoSummaryType>
     }
+
 type Props = {}
 export const Summary: React.FC<Props> = () => {
-  const { url } = useParams()
   const [data, setData] = useState<Data>({
     loading: true,
   })
+
+  const { search: queryString } = useLocation()
+  let { url } = useParams()
+  url += queryString
 
   // Query url from api
   useEffect(() => {
@@ -47,7 +54,7 @@ export const Summary: React.FC<Props> = () => {
         setData({
           loading: false,
           error: null,
-          ...data,
+          summary: data,
         })
       } catch (error) {
         setData({
@@ -70,21 +77,26 @@ export const Summary: React.FC<Props> = () => {
   } else if (data.error != null) {
     body = `${data.error}`
   } else {
+    const { summary } = data
+    let renderedSummary
+    if (summary.type == 'article') {
+      renderedSummary = <ArticleSummary summary={summary} />
+    } else if (summary.type == 'video') {
+      renderedSummary = <VideoSummary summary={summary} />
+    }
+
     body = (
       <FadeIn>
         <div css={styles.info}>
-          <a css={styles.urlLink} href={data.url}>
-            <img src={data.icon} css={styles.icon} />
+          <a css={styles.urlLink} href={summary.url}>
+            <img src={summary.icon} css={styles.icon} />
             <span css={styles.domain}>
-              {new URL(data.url).hostname.replace(/^www\./i, '')}
+              {new URL(summary.url).hostname.replace(/^www\./i, '')}
             </span>
           </a>
         </div>
-        <h1>{data.title}</h1>
-        <img src={data.image || undefined} />
-        {data.summary.map((p) => (
-          <p css={styles.content}>{p.join(' ')}</p>
-        ))}
+        <h1>{summary.title}</h1>
+        {renderedSummary}
       </FadeIn>
     )
   }

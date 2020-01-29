@@ -25,6 +25,6 @@ class SumySummarizer(Summarizer):
         parser = PlaintextParser.from_string(content, tokenizer)
 
         sentences = []
-        for sentence in summarizer(parser.document, 5):
+        for sentence in summarizer(parser.document, '10%'):
             sentences.append([str(sentence)])
         return sentences

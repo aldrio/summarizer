@@ -30,10 +30,6 @@ export default {
     })
   },
 
-  content: css({
-    textAlign: 'justify',
-  }),
-
   info: css({
     marginBottom: '2rem',
   }),

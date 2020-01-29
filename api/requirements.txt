@@ -7,3 +7,5 @@ beautifulsoup4==4.8.2
 favicon==0.7.0 
 sumy==0.8.1
 numpy==1.18.1
+pysubs2==0.2.4
+youtube_dl==2020.1.24
