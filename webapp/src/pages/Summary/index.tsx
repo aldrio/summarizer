@@ -107,7 +107,7 @@ export const Summary: React.FC<Props> = () => {
         <div css={styles.header}>
           <Link to="/" css={styles.brand.container}>
             <Logo width={'1rem'} height={'1rem'} />
-            <h1 css={styles.brand.text}>Text Summarizer</h1>
+            <h1 css={styles.brand.text}>Summarizer</h1>
           </Link>
         </div>
         {body}

@@ -13,7 +13,7 @@ export const Frontpage: React.FC<Props> = () => {
     <div css={styles.background}>
       <Link to="/" css={styles.title.container}>
         <Logo width={75} height={75} /> 
-        <h1 css={styles.title.text}>Text Summarizer</h1>
+        <h1 css={styles.title.text}>Summarizer</h1>
       </Link>
       <Content>
         <div css={styles.search.wrapper}>
