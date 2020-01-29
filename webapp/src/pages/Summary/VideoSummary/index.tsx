@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './styles'
 import { SummaryType } from '..'
 import YouTube from 'react-youtube'
@@ -19,10 +19,11 @@ export const VideoSummary: React.FC<Props> = ({ summary }) => {
   const match = summary.url.match(/(.*(\/|v=))(.+)$/)
   const videoId = match?.[3]
 
-  let index: number = 0
-  let videoPlayer: any = null
+  let [index, setIndex] = useState(0)
+  let [videoPlayer, setVideoPlayer] = useState<any>(null)
 
-  function startSub(index: number) {
+  // Change to correct time when index changes
+  useEffect(() => {
     if (!videoPlayer) {
       return
     }
@@ -31,11 +32,13 @@ export const VideoSummary: React.FC<Props> = ({ summary }) => {
 
     const next = summary.summary[index]
     const startSeconds = next.start / 1000 - 0.25
-    
+
     if (Math.abs(currentTime - startSeconds) > 3) {
       videoPlayer.seekTo(startSeconds, true)
     }
-  }
+  }, [videoPlayer, index])
+
+  // Set an interval to poll if the index should change
   useEffect(() => {
     const interval = setInterval(() => {
       if (!videoPlayer) {
@@ -49,12 +52,12 @@ export const VideoSummary: React.FC<Props> = ({ summary }) => {
         if (summary.summary.length - 1 == index) {
           videoPlayer.stopVideo()
         } else {
-          startSub(++index)
+          setIndex(index + 1)
         }
       }
     }, 250)
     return () => clearInterval(interval)
-  }, [])
+  }, [index, videoPlayer])
 
   if (!videoId) {
     return <>Error</>
@@ -66,13 +69,17 @@ export const VideoSummary: React.FC<Props> = ({ summary }) => {
         videoId={videoId}
         opts={{ playerVars: { autoplay: 1, controls: 0 } }}
         onReady={({ target }) => {
-          videoPlayer = target
-          startSub(0)
-          videoPlayer.playVideo()
+          setVideoPlayer(target)
         }}
       />
-      {summary.summary.map((s) => (
-        <p css={styles.content}>{s.text}</p>
+      {summary.summary.map((s, id) => (
+        <p
+          key={id}
+          onClick={() => setIndex(id)}
+          css={[styles.content, index == id && styles.highlighted]}
+        >
+          {s.text}
+        </p>
       ))}
     </>
   )
