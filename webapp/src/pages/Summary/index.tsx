@@ -43,7 +43,7 @@ export const Summary: React.FC<Props> = () => {
     ;(async () => {
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL}?url=${encodeURIComponent(
+          `${process.env.REACT_APP_API_URL}/summarize?url=${encodeURIComponent(
             (url || '').toString()
           )}`
         )
