@@ -15,6 +15,9 @@ export const Frontpage: React.FC<Props> = () => {
         <Logo width={75} height={75} /> 
         <h1 css={styles.title.text}>Summarizer</h1>
       </Link>
+      <h2 css={styles.instructions}>
+        Summarize an article or youtube video
+      </h2>
       <Content>
         <div css={styles.search.wrapper}>
           <div

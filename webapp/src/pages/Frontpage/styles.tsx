@@ -28,7 +28,7 @@ export default {
       display: 'flex',
       alignItems: 'center',
       textAlign: 'center',
-      marginBottom: '2.5rem',
+      marginBottom: '1.5rem',
     }),
     text: css({
       margin: 0,
@@ -37,6 +37,15 @@ export default {
       color: '#000',
     }),
   },
+
+  instructions: css({
+    textAlign: 'center',
+    color: 'darkgrey',
+    fontStyle: 'italic',
+    fontSize: '1.0rem',
+    fontWeight: 'normal',
+    marginBottom: '2.0rem',
+  }),
 
   search: {
     wrapper: css({
@@ -68,4 +77,5 @@ export default {
       padding: 10,
     }),
   },
+
 }
