@@ -67,7 +67,7 @@ export const VideoSummary: React.FC<Props> = ({ summary }) => {
     <>
       <YouTube
         videoId={videoId}
-        opts={{ playerVars: { autoplay: 1, controls: 0 } }}
+        opts={{ playerVars: { autoplay: 1, controls: 0 }, width: '100%' }}
         onReady={({ target }) => {
           setVideoPlayer(target)
         }}
