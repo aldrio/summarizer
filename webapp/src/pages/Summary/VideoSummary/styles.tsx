@@ -19,4 +19,13 @@ export default {
     paddingTop: 24,
     paddingBottom: 24,
   }),
+  performanceNote: css({
+    backgroundColor: '#FFED8D',
+    borderRadius: 4,
+    marginBottom: 24,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+  }),
 }

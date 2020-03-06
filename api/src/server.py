@@ -157,7 +157,8 @@ def summarize_video(url):
         summary=sum_subs,
         url=url,
         title=title,
-        icon=icons[0].url
+        icon=icons[0].url,
+        goodSubtitles=well_formatted,
     )
 
 def summarize_article(url):
