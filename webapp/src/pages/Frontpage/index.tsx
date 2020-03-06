@@ -9,6 +9,12 @@ export const Frontpage: React.FC<Props> = () => {
   const history = useHistory()
   const [url, setUrl] = useState('')
 
+  function submit(e: React.SyntheticEvent) {
+    e.preventDefault()
+    const norm = url.replace(/^https?:\/\//i, '')
+    history.push(`/s/${norm}`)
+  }
+
   return (
     <div css={styles.background}>
       <Link to="/" css={styles.title.container}>
@@ -20,7 +26,8 @@ export const Frontpage: React.FC<Props> = () => {
       </h2>
       <Content>
         <div css={styles.search.wrapper}>
-          <div
+          <form
+            onSubmit={submit}
             css={styles.search.container}
             style={{
               minWidth: `${Math.min(100, 50 + url.length * 3)}%`,
@@ -36,14 +43,11 @@ export const Frontpage: React.FC<Props> = () => {
             />
             <button
               css={styles.search.button}
-              onClick={() => {
-                const norm = url.replace(/^https?:\/\//i, '')
-                history.push(`/s/${norm}`)
-              }}
+              onClick={submit}
             >
               Summarize
             </button>
-          </div>
+          </form>
         </div> 
       </Content>
     </div>
