@@ -13,7 +13,7 @@ function Index() {
   const [url, setUrl] = useState("");
 
   return (
-    <div className="w-full min-h-screen flex flex-col justify-center items-center gap-8 bg-gradient-to-t from-slate-200 to-white">
+    <div className="w-full min-h-screen flex flex-col justify-center items-center gap-8">
       {/* header */}
       <div className="flex flex-col items-center gap-4">
         <Link to="/">
