@@ -18,12 +18,12 @@ function Index() {
       <div className="flex flex-col items-center gap-4">
         <Link to="/">
           {/*  */}
-          <h1 className="flex items-center gap-4 text-5xl sm:text-7xl font-bold">
+          <h1 className="flex items-center gap-4 text-4xl sm:text-5xl md:text-7xl font-bold">
             <Logo />
             <span>Summarizer</span>
           </h1>
         </Link>
-        <div className="text-lg sm:text-2xl italic text-slate-500">
+        <div className="text-lg md:text-2xl italic text-slate-500">
           <span>Summarize youtube videos and articles</span>
         </div>
       </div>
@@ -41,7 +41,7 @@ function Index() {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="Paste a link here"
-          className="p-2 px-4 rounded-md shadow-md border grow"
+          className="p-2 px-4 rounded-md shadow-md border grow w-full"
           type="url"
           required
         />

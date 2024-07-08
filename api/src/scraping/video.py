@@ -7,7 +7,7 @@ import os
 
 
 @lru_cache(maxsize=128)
-def scrape_video(url) -> tuple[str, str]:
+def scrape_video(url) -> tuple[str, str, str]:
     """
     Fetches video subtitles and title from a given URL.
     """
@@ -39,9 +39,10 @@ def scrape_video(url) -> tuple[str, str]:
     with open(info_path, "r") as f:
         video = json.load(f)
         title = video["title"]
+        url = video["webpage_url"]
 
     # Delete youtube-dl files
     os.remove(info_path)
     os.remove(subs_path)
 
-    return title, raw_subs
+    return title, url, raw_subs

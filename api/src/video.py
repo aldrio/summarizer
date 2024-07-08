@@ -11,7 +11,7 @@ from .scraping.simplesrt import SimpleSrt, dedupe_yt_srt
 @lru_cache(maxsize=128)
 def summarize_video(url, summarizer: Summarizer):
     try:
-        title, raw_subs = scrape_video(url)
+        title, url, raw_subs = scrape_video(url)
     except Exception as e:
         raise PublicError("Failed to download the video", e)
 
@@ -91,6 +91,7 @@ def summarize_video(url, summarizer: Summarizer):
 
     return {
         "title": title,
+        "url": url,
         "summary": sum_subs,
         "goodSubtitles": well_formatted,
         "reductionRatio": len(content) / len(" ".join([s["text"] for s in sum_subs])),
