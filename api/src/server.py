@@ -31,7 +31,7 @@ def generic_error(_e):
     return jsonify({"error": "Internal server error"}), 500
 
 
-@application.route("/")
+@application.route("/healthz")
 def healthz():
     return "OK"
 
