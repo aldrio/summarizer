@@ -28,12 +28,13 @@ function Index() {
         </div>
       </div>
       <form
-        onSubmit={() =>
+        onSubmit={(event) => {
+          event.preventDefault();
           navigate({
             to: "/s/$",
             params: { _splat: url.replace(/^https?:\/\//i, "") },
-          })
-        }
+          });
+        }}
         className="px-4 flex gap-4 w-full justify-center items-center focus-within:max-w-2xl max-w-xl transition-[max-width] duration-300 ease-in-out"
       >
         <input

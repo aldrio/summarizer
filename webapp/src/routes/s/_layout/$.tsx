@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useLocation } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { HashLoader } from "react-spinners";
 import { TbArrowLeft, TbExclamationCircle } from "react-icons/tb";
@@ -12,10 +12,16 @@ export const Route = createFileRoute("/s/_layout/$")({
   component: SummarizedRoute,
   pendingComponent: SummarizedRoutePending,
   loaderDeps: ({ search }) => ({ search }),
-  loader: ({ context, params: { _splat: url }, deps: { search } }) => {
+  loader: ({
+    context,
+    params: { _splat: url },
+    deps: { search },
+    location,
+  }) => {
     // rebuild the requested url from params and search
     const fullUrl = new URL(normalizeUrl(url));
     fullUrl.search = new URLSearchParams(search).toString();
+    fullUrl.hash = location.hash;
     return context.queryClient.ensureQueryData(summarizeOptions(fullUrl.href));
   },
   errorComponent: ({ error }) => (
@@ -39,6 +45,7 @@ function SummarizedRoute() {
   const { _splat: url } = Route.useParams();
   const fullUrl = new URL(normalizeUrl(url));
   fullUrl.search = new URLSearchParams(Route.useLoaderDeps().search).toString();
+  fullUrl.hash = useLocation().hash;
   const { data: summary } = useSuspenseQuery(summarizeOptions(fullUrl.href));
 
   return (

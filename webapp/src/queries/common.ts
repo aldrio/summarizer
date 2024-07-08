@@ -38,7 +38,6 @@ export async function apiFetch<T>(
   try {
     response = await fetch(`${import.meta.env.VITE_API_URL}/${endpoint}`, init);
   } catch (error) {
-    console.log("error???", error);
     throw new Error("There was an issue reaching the API");
   }
   return getResponseData<T>(response);
