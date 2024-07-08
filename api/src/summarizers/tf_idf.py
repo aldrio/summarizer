@@ -4,12 +4,18 @@ import nltk
 
 from .summarizer import Summarizer
 
-stop_words = set(nltk.corpus.stopwords.words('english'))
+stop_words = set(nltk.corpus.stopwords.words("english"))
 ps = nltk.stem.PorterStemmer()
 
-class TfIdfSummarizer(Summarizer):
 
-    def _tokenize_document(self, doc):
+class TfIdfSummarizer(Summarizer):
+    """
+    Summarizer using TF-IDF
+
+    See https://en.wikipedia.org/wiki/Tf%E2%80%93idf
+    """
+
+    def tokenize_document(self, doc):
         words = nltk.tokenize.word_tokenize(doc)
         twords = []
 
@@ -17,14 +23,13 @@ class TfIdfSummarizer(Summarizer):
             word = word.lower()
             if word in stop_words:
                 continue
-            if bool(re.search(r'\W', word)):
+            if bool(re.search(r"\W", word)):
                 continue
             word = ps.stem(word)
             twords.append(word)
         return twords
 
-
-    def _create_tf_matrix(self, doc):
+    def create_tf_matrix(self, doc):
         tf_matrix = {}
 
         for word in doc:
@@ -38,8 +43,7 @@ class TfIdfSummarizer(Summarizer):
 
         return tf_matrix
 
-
-    def _create_idf_matrix(self, tf_matrices):
+    def create_idf_matrix(self, tf_matrices):
         idf_matrix = {}
 
         # Collect set of all words
@@ -55,24 +59,21 @@ class TfIdfSummarizer(Summarizer):
 
         return idf_matrix
 
-
-    def _word_tf_idf(self, word, tf_matrix, idf_matrix):
+    def word_tf_idf(self, word, tf_matrix, idf_matrix):
         if word not in tf_matrix:
             return 0.0
         return tf_matrix[word] * idf_matrix[word]
 
-
-    def _score_doc(self, doc, tf_matrix, idf_matrix):
+    def score_doc(self, doc, tf_matrix, idf_matrix):
         score = 0
 
         if len(doc) < 3:
             return score
 
         for word in doc:
-            score += self._word_tf_idf(word, tf_matrix, idf_matrix)
+            score += self.word_tf_idf(word, tf_matrix, idf_matrix)
 
         return score / (len(doc) / 2)
-
 
     def summarize(self, paragraphs):
         """Summarize content with TF-IDF"""
@@ -80,23 +81,14 @@ class TfIdfSummarizer(Summarizer):
         paragraphs = [nltk.tokenize.sent_tokenize(p) for p in paragraphs]
         sentences = [s for p in paragraphs for s in p]
 
-        docs = [self._tokenize_document(s) for s in sentences]
+        docs = [self.tokenize_document(s) for s in sentences]
 
-        tf_matrices = [self._create_tf_matrix(doc) for doc in docs]
-        idf_matrix = self._create_idf_matrix(tf_matrices)
+        tf_matrices = [self.create_tf_matrix(doc) for doc in docs]
+        idf_matrix = self.create_idf_matrix(tf_matrices)
 
         scores = [
-            self._score_doc(
-                doc,
-                tf_matrix,
-                idf_matrix
-            ) for (
-                doc,
-                tf_matrix
-            ) in zip(
-                docs,
-                tf_matrices
-            )
+            self.score_doc(doc, tf_matrix, idf_matrix)
+            for (doc, tf_matrix) in zip(docs, tf_matrices)
         ]
         sorted_scores = sorted(scores, reverse=True)
         threshold = sorted_scores[max(2, min(5, math.floor(len(scores) / 4)))]
@@ -107,9 +99,12 @@ class TfIdfSummarizer(Summarizer):
             p_summary = []
             p_start = p_stop
             p_stop = p_start + len(paragraph)
-            for (i, sentence) in enumerate(sentences[p_start:p_stop]):
+            for i, sentence in enumerate(sentences[p_start:p_stop]):
                 if scores[i + p_start] >= threshold:
                     p_summary.append(sentence)
             summary.append(p_summary)
 
         return list(filter(lambda p: len(p) != 0, summary))
+
+    def algorithm_name(self):
+        return "TF-IDF"

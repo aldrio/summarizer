@@ -27,7 +27,7 @@ export function VideoSummary({ summary }: VideoSummaryProps) {
   // when the index changes, scroll to the caption
   useEffect(() => {
     const element = captionsContainerRef.current?.querySelector(
-      `[data-captionIndex="${index}"]`
+      `[data-captionindex="${index}"]`
     ) as HTMLElement;
     if (element) {
       captionsContainerRef.current?.scrollTo({
@@ -111,7 +111,7 @@ export function VideoSummary({ summary }: VideoSummaryProps) {
           {summary.summary.map((s, id) => (
             <div
               key={id}
-              data-captionIndex={id}
+              data-captionindex={id}
               className={cn(
                 "p-2 px-4 rounded-lg transition-colors cursor-pointer mb-8 hover:bg-slate-100",
                 index === id && "bg-yellow-100 hover:bg-yellow-200"

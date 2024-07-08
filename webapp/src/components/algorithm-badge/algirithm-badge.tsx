@@ -21,6 +21,8 @@ export function AlgorithmBadge({
     link = "https://en.wikipedia.org/wiki/Large_language_model";
   } else if (algorithm === "LSA") {
     link = "https://en.wikipedia.org/wiki/Latent_semantic_analysis";
+  } else if (algorithm === "TF-IDF") {
+    link = "https://en.wikipedia.org/wiki/Tf%E2%80%93idf";
   }
 
   return (
