@@ -1,4 +1,4 @@
 import nltk
 
-nltk.download("punkt")
-nltk.download("stopwords")
+nltk.download("punkt", download_dir="./nltk")
+nltk.download("stopwords", download_dir="./nltk")
