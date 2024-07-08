@@ -27,6 +27,11 @@ def generic_error(_e):
     return jsonify({"error": "Internal server error"}), 500
 
 
+@application.route("/")
+def healthz():
+    return "OK"
+
+
 @application.route("/summarize")
 def summarize():
     url = request.args.get("url", "")

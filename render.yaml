@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: summarizer-website
+    runtime: static
+    rootDir: ./website
+    buildCommand: yarn build
+    staticPublishPath: ./dist
+    domains:
+      - summarizer.aldrio.io
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /
+    envVars:
+      - key: VITE_API_URL
+        value: https://www.example.com
+
+  - type: web
+    name: summarizer-api
+    runtime: python
+    rootDir: ./api
+    region: ohio
+    buildCommand: python ./build.py
+    healthCheckPath: /healthz
+    envVars:
+      - key: PRODUCTION
+        value: "True"
+      - key: WEBAPP_URL
+        value: https://summarizer.aldrio.io
