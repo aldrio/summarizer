@@ -2,6 +2,7 @@ from functools import lru_cache
 from difflib import SequenceMatcher
 import re
 
+from .errors import PublicError
 from .summarizers.summarizer import Summarizer
 from .scraping.video import scrape_video
 from .scraping.simplesrt import SimpleSrt, dedupe_yt_srt
@@ -9,7 +10,10 @@ from .scraping.simplesrt import SimpleSrt, dedupe_yt_srt
 
 @lru_cache(maxsize=128)
 def summarize_video(url, summarizer: Summarizer):
-    title, raw_subs = scrape_video(url)
+    try:
+        title, raw_subs = scrape_video(url)
+    except Exception as e:
+        raise PublicError("Failed to download the video", e)
 
     srt = SimpleSrt(raw_subs)
     subs = list(dedupe_yt_srt(srt.subs))

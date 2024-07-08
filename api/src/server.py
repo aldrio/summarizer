@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import re
 from dotenv import load_dotenv
 
+from .errors import PublicError
 from .summarizers.all import SUMMARIZERS
 from .article import summarize_article
 from .video import summarize_video
@@ -14,14 +15,26 @@ application = Flask(__name__)
 CORS(application)
 
 
+@cross_origin()
+@application.errorhandler(PublicError)
+def public_error(error):
+    return jsonify({"error": error.message}), 500
+
+
+@cross_origin()
+@application.errorhandler(500)
+def generic_error(_e):
+    return jsonify({"error": "Internal server error"}), 500
+
+
 @application.route("/summarize")
 def summarize():
     url = request.args.get("url", "")
     url = "https://" + url.removeprefix("http://").removeprefix("https://")
-    algorithm_key = request.args.get("algorithm", "lsa")
+    algorithm_key = request.args.get("algorithm", "lsa").lower()
 
     if algorithm_key not in SUMMARIZERS:
-        return jsonify({"error": "Algorithm not found"})
+        raise PublicError("Invalid summarization algorithm")
     summarizer = SUMMARIZERS[algorithm_key]
 
     if re.match(r"^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$", url):

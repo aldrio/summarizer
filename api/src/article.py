@@ -1,14 +1,19 @@
 from functools import lru_cache
 import re
 
+from .errors import PublicError
 from .summarizers.summarizer import Summarizer
 from .scraping.page import fetch_page, get_page_title
 
 
 @lru_cache(maxsize=128)
 def summarize_article(url, summarizer: Summarizer):
-    page = fetch_page(url)
+    try:
+        page = fetch_page(url)
+    except Exception as e:
+        raise PublicError("Failed to download the article", e)
 
+    raise Exception("This is a test")
     image = None
     og_image = page.find(name="meta", property="og:image")
     if og_image is not None:

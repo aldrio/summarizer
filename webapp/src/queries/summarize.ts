@@ -1,5 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 
+import { apiFetch } from "./common";
+
 export interface SummarizationCommon {
   url: string;
   icon: string;
@@ -32,17 +34,7 @@ export type SummarizeResponse = VideoSummarization | ArticleSummarization;
 export function summarizeOptions(url: string) {
   return queryOptions({
     queryKey: ["summarization", url],
-    queryFn: async () => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/summarize?url=${encodeURIComponent(url)}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Error");
-      }
-
-      const data = await response.json();
-      return data as SummarizeResponse;
-    },
+    queryFn: () =>
+      apiFetch<SummarizeResponse>(`summarize?url=${encodeURIComponent(url)}`),
   });
 }

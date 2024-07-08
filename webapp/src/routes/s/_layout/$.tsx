@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { HashLoader } from "react-spinners";
-import { TbArrowLeft } from "react-icons/tb";
+import { TbArrowLeft, TbExclamationCircle } from "react-icons/tb";
 
 import { summarizeOptions } from "../../../queries/summarize";
 import { normalizeUrl } from "../../../utils/normalize";
@@ -18,6 +18,21 @@ export const Route = createFileRoute("/s/_layout/$")({
     fullUrl.search = new URLSearchParams(search).toString();
     return context.queryClient.ensureQueryData(summarizeOptions(fullUrl.href));
   },
+  errorComponent: ({ error }) => (
+    <div className="flex flex-col items-center gap-4 pt-16">
+      <TbExclamationCircle className="text-red-500 text-4xl" />
+      <span className="text-red-500 italic">Uh oh! {error.message}</span>
+      <div className="my-16">
+        <Link
+          to="/"
+          className="p-2 px-4 font-medium rounded-md shadow-md bg-green bg-primary-700 hover:bg-primary-800 active:bg-primary-900 text-white flex flex-row items-center gap-2"
+        >
+          <TbArrowLeft />
+          <span>Try another</span>
+        </Link>
+      </div>
+    </div>
+  ),
 });
 
 function SummarizedRoute() {
