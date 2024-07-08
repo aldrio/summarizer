@@ -6,7 +6,7 @@ services:
     buildCommand: yarn build
     staticPublishPath: ./dist
     domains:
-      - summarizer.aldrio.io
+      - summarizer.aldr.io
     routes:
       - type: rewrite
         source: /*
@@ -27,4 +27,4 @@ services:
       - key: PRODUCTION
         value: "True"
       - key: WEBAPP_URL
-        value: https://summarizer.aldrio.io
+        value: https://summarizer.aldr.io
