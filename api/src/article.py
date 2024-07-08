@@ -13,7 +13,6 @@ def summarize_article(url, summarizer: Summarizer):
     except Exception as e:
         raise PublicError("Failed to download the article", e)
 
-    raise Exception("This is a test")
     image = None
     og_image = page.find(name="meta", property="og:image")
     if og_image is not None:
