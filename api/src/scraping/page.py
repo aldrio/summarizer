@@ -82,7 +82,6 @@ def get_icon(url):
             return "favicon" in icon.url
 
         icons = sorted(icons, key=sort, reverse=True)
-        print(icons)
         return icons[0].url
 
     return None

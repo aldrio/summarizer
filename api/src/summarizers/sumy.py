@@ -1,7 +1,7 @@
-from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer
 from sumy.nlp.stemmers import Stemmer
+from sumy.models.dom import ObjectDocumentModel, Sentence, Paragraph
 
 from .summarizer import Summarizer
 
@@ -13,18 +13,26 @@ class SumySummarizer(Summarizer):
     def summarize(self, paragraphs):
         """Summarize content with the sumy library"""
 
-        content = "\n\n".join(paragraphs)
+        tokenizer = Tokenizer(LANGUAGE)
+        paragraphs = [
+            Paragraph([Sentence(s, tokenizer) for s in p]) for p in paragraphs
+        ]
+        document = ObjectDocumentModel(paragraphs)
 
         stemmer = Stemmer(LANGUAGE)
         summarizer = LsaSummarizer(stemmer)
 
-        tokenizer = Tokenizer(LANGUAGE)
-        parser = PlaintextParser.from_string(content, tokenizer)
+        summarized_paragraphs = [[] for _ in paragraphs]
+        for sentence in summarizer(document, "10%"):
+            paragraph_index = next(
+                i for i, p in enumerate(paragraphs) if sentence in p.sentences
+            )
+            summarized_paragraphs[paragraph_index].append(str(sentence))
 
-        sentences = []
-        for sentence in summarizer(parser.document, "10%"):
-            sentences.append([str(sentence)])
-        return sentences
+        # remove empty paragraphs
+        summarized_paragraphs = [p for p in summarized_paragraphs if p]
+
+        return summarized_paragraphs
 
     def algorithm_name(self):
         return "LSA"

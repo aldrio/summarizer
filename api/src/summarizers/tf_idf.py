@@ -78,7 +78,6 @@ class TfIdfSummarizer(Summarizer):
     def summarize(self, paragraphs):
         """Summarize content with TF-IDF"""
 
-        paragraphs = [nltk.tokenize.sent_tokenize(p) for p in paragraphs]
         sentences = [s for p in paragraphs for s in p]
 
         docs = [self.tokenize_document(s) for s in sentences]
@@ -93,18 +92,19 @@ class TfIdfSummarizer(Summarizer):
         sorted_scores = sorted(scores, reverse=True)
         threshold = sorted_scores[max(2, min(5, math.floor(len(scores) / 4)))]
 
-        summary = []
+        summarized_paragraphs = []
         p_stop = 0
         for paragraph in paragraphs:
-            p_summary = []
+            summarized_paragraph = []
             p_start = p_stop
             p_stop = p_start + len(paragraph)
             for i, sentence in enumerate(sentences[p_start:p_stop]):
                 if scores[i + p_start] >= threshold:
-                    p_summary.append(sentence)
-            summary.append(p_summary)
+                    summarized_paragraph.append(sentence)
+            if summarized_paragraph:
+                summarized_paragraphs.append(summarized_paragraph)
 
-        return list(filter(lambda p: len(p) != 0, summary))
+        return summarized_paragraphs
 
     def algorithm_name(self):
         return "TF-IDF"

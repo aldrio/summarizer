@@ -1,5 +1,6 @@
 from functools import lru_cache
 import re
+import nltk
 
 from .errors import PublicError
 from .summarizers.summarizer import Summarizer
@@ -19,54 +20,43 @@ def summarize_article(url, summarizer: Summarizer):
         image = og_image.get("content")
 
     # Parse body of page
+    page = page.find("body")
 
-    # Group paragraphs by parent, use the largest one as the main text
-    paragraphs = page.find_all(["p"])
-    containers = {}
-    for paragraph in paragraphs:
-        parent = paragraph.parent
-        if parent in containers:
-            containers[parent].append(paragraph)
-        else:
-            containers[parent] = [paragraph]
+    # remove scripts and styles
+    for script in page(["script", "style"]):
+        script.decompose()
 
-    main_text = None
-    for paragraphs in containers.values():
-        if main_text is None or len(main_text) < len(paragraphs):
-            main_text = paragraphs
-    main_text = main_text[0].parent
+    # Find content
+    content = page.find_all(["h1", "h2", "h3", "h4", "h5", "h6", "h7", "p"])
 
-    # Organize content in paragraphs, where headers are in caps at beginning
-    last_header = False
     paragraphs = []
-    for paragraph in main_text.find_all(["p", "h1", "h2", "h3"]):
+    for content in content:
+        text = content.get_text()
+        # collapse white space
+        text = re.sub(r"\s+", " ", text)
+        text = text.strip()
 
-        p = paragraph.get_text().strip()
-        # collapse all multiple whitespaces to a single space
-        p = re.sub(r"\s\s+", r" ", p, flags=re.M)
-
-        # ensure the line ends with a punctuation
-        m = re.search(r"\w$", p)
-        if m is not None:
-            p += "."
-
-        if paragraph.name == "p":
-            if last_header:
-                paragraphs[-1] += "\n" + p
-            else:
-                paragraphs.append(p)
-            last_header = False
-        else:
-            paragraphs.append(p.upper())
-            last_header = True
+        if not text:
+            continue
+        # Split into sentences
+        sentences = nltk.tokenize.sent_tokenize(text)
+        paragraphs.append(sentences)
 
     # Summarize
-    summary = summarizer.summarize(paragraphs)
+    summarized_paragraphs = summarizer.summarize_article(paragraphs)
+
+    # Calculate reduction ratio
+    full_content = [sentence for paragraph in paragraphs for sentence in paragraph]
+    full_content_len = sum(len(sentence) for sentence in full_content)
+
+    summarized_content = [
+        sentence for paragraph in summarized_paragraphs for sentence in paragraph
+    ]
+    summarized_content_len = sum(len(sentence) for sentence in summarized_content)
 
     return {
         "title": get_page_title(page),
-        "summary": summary,
+        "summary": summarized_paragraphs,
         "image": image,
-        "reductionRatio": len(" ".join(" ".join(s) for s in paragraphs))
-        / len(" ".join(" ".join(s) for s in summary)),
+        "reductionRatio": full_content_len / summarized_content_len,
     }
