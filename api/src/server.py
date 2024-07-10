@@ -1,6 +1,6 @@
 import os
 
-os.environ["NLTK_DATA"] = "./nltk_data"
+os.environ["NLTK_DATA"] = "./data/nltk_data"
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
