@@ -1,3 +1,4 @@
+import math
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer
 from sumy.nlp.stemmers import Stemmer
@@ -9,6 +10,9 @@ LANGUAGE = "english"
 
 
 class SumySummarizer(Summarizer):
+
+    def __init__(self, target_ratio=0.1):
+        self.target_ratio = target_ratio
 
     def summarize(self, paragraphs):
         """Summarize content with the sumy library"""
@@ -23,7 +27,7 @@ class SumySummarizer(Summarizer):
         summarizer = LsaSummarizer(stemmer)
 
         summarized_paragraphs = [[] for _ in paragraphs]
-        for sentence in summarizer(document, "10%"):
+        for sentence in summarizer(document, f"{math.ceil(self.target_ratio * 100)}%"):
             paragraph_index = next(
                 i for i, p in enumerate(paragraphs) if sentence in p.sentences
             )
