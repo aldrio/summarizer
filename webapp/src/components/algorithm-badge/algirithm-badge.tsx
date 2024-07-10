@@ -23,9 +23,6 @@ export function AlgorithmBadge({
     link = "https://en.wikipedia.org/wiki/Latent_semantic_analysis";
   } else if (algorithm === "TF-IDF") {
     link = "https://en.wikipedia.org/wiki/Tf%E2%80%93idf";
-  } else if (algorithm === "Sentence Embeddings") {
-    link =
-      "https://huggingface.co/sentence-transformers/paraphrase-albert-small-v2";
   }
 
   return (
