@@ -1,11 +1,13 @@
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv(".env.local")
 os.environ["NLTK_DATA"] = "./nltk_data"
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 import re
-from dotenv import load_dotenv
 
 from .errors import PublicError
 from .summarizers.all import SUMMARIZERS
@@ -13,7 +15,6 @@ from .article import summarize_article
 from .video import summarize_video
 from .scraping.page import get_icon
 
-load_dotenv(".env.local")
 
 application = Flask(__name__)
 CORS(application)
