@@ -16,6 +16,8 @@ services:
         value: https://summarizer-api-x8gv.onrender.com
       - key: OPENAI_API_KEY
         sync: false
+      - key: CORS_ORIGIN
+        value: https://summarizer.aldr.io
 
   - type: web
     name: summarizer-api

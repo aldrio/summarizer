@@ -17,7 +17,10 @@ from .scraping.page import get_icon
 
 
 application = Flask(__name__)
-CORS(application)
+if os.environ.get("CORS_ORIGIN"):
+    CORS(application, origins=os.environ["CORS_ORIGIN"])
+else:
+    CORS(application)
 
 
 @cross_origin()
