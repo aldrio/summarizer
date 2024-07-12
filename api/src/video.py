@@ -25,8 +25,10 @@ def summarize_video(url, summarizer: Summarizer):
         sub.text = re.sub(r"\[.+\]", "", sub.text)
         sub.text = re.sub(r"\(.+\)", "", sub.text)
 
-        # remove all non-space whitespace (run twice to collapse double spaces)
-        sub.text = re.sub(r"\s+", " ", sub.text)
+        # remove escape sequences
+        sub.text = re.sub(r"\\\w", "", sub.text)
+
+        # collapse whitespace
         sub.text = re.sub(r"\s+", " ", sub.text)
 
         sub.text = sub.text.strip()
@@ -91,7 +93,7 @@ def summarize_video(url, summarizer: Summarizer):
         if (
             prev_sum_sub
             and prev_sum_sub["end"] >= (start_time - 2)
-            and prev_sum_sub["start"] < start_time
+            and prev_sum_sub["start"] <= start_time
         ):
             prev_sum_sub["text"] += " " + indexed_sentence
             prev_sum_sub["end"] = end_time
