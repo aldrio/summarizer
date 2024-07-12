@@ -1,4 +1,4 @@
-import Sentry from "@sentry/react";
+import * as Sentry from "@sentry/react";
 
 if (import.meta.env.PROD && import.meta.env.SSR === false) {
   Sentry.init({
