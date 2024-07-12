@@ -3,6 +3,9 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import "./utils/monitoring.ts";
+import "./utils/analytics.ts";
+
 import { routeTree } from "./routeTree.gen";
 
 import "@fontsource/open-sans/300.css";
@@ -39,6 +42,6 @@ if (!rootElement.innerHTML) {
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
       </QueryClientProvider>
-    </StrictMode>,
+    </StrictMode>
   );
 }

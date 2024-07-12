@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 load_dotenv(".env.local")
 os.environ["NLTK_DATA"] = "./nltk_data"
 
+from . import monitoring
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 import re
@@ -38,6 +40,11 @@ def generic_error(_e):
 @application.route("/healthz")
 def healthz():
     return "OK"
+
+
+@application.route("/errorz")
+def errorz():
+    raise Exception("This is a test error")
 
 
 @application.route("/summarize")

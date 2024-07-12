@@ -69,6 +69,13 @@ function Index() {
           </a>
         </p>
       </div>
+      <button
+        onClick={() => {
+          throw new Error("Test error");
+        }}
+      >
+        Throw error
+      </button>
       <Select
         className="fixed bottom-4 right-4"
         onChange={setAlgorithm}
