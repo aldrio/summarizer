@@ -3,6 +3,8 @@ import { useState } from "react";
 import { TbArrowRight } from "react-icons/tb";
 
 import { Logo } from "../components/logo/logo";
+import { Select } from "../components/select/select";
+import { useLocalStorage } from "../utils/use-localstorage";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -11,6 +13,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   const navigate = useNavigate();
   const [url, setUrl] = useState("");
+  const [algorithm, setAlgorithm] = useLocalStorage("algorithm", "llm");
 
   return (
     <div className="w-full min-h-screen flex flex-col justify-center items-center gap-8">
@@ -66,6 +69,16 @@ function Index() {
           </a>
         </p>
       </div>
+      <Select
+        className="fixed bottom-4 right-4"
+        onChange={setAlgorithm}
+        value={algorithm}
+        items={[
+          { key: "llm", label: "LLM" },
+          { key: "tf_idf", label: "TF-IDF" },
+          { key: "lsa", label: "LSA" },
+        ]}
+      />
     </div>
   );
 }

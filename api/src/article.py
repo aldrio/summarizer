@@ -58,5 +58,5 @@ def summarize_article(url, summarizer: Summarizer):
         "title": get_page_title(page),
         "summary": summarized_paragraphs,
         "image": image,
-        "reductionRatio": full_content_len / summarized_content_len,
+        "reductionRatio": full_content_len / summarized_content_len - 1.0,
     }

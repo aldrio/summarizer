@@ -113,7 +113,7 @@ def summarize_video(url, summarizer: Summarizer):
         "url": url,
         "summary": sum_subs,
         "goodSubtitles": well_formatted,
-        "reductionRatio": full_content_len / summarized_content_len,
+        "reductionRatio": full_content_len / summarized_content_len - 1,
     }
 
 

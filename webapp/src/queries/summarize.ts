@@ -32,9 +32,13 @@ export interface ArticleSummarization extends SummarizationCommon {
 export type SummarizeResponse = VideoSummarization | ArticleSummarization;
 
 export function summarizeOptions(url: string) {
+  const localAlgorithm = localStorage.getItem("algorithm");
+  const algorithm = localAlgorithm ? JSON.parse(localAlgorithm) : "llm";
   return queryOptions({
-    queryKey: ["summarization", url],
+    queryKey: ["summarization", url, algorithm],
     queryFn: () =>
-      apiFetch<SummarizeResponse>(`summarize?url=${encodeURIComponent(url)}`),
+      apiFetch<SummarizeResponse>(
+        "summarize?" + new URLSearchParams({ url, algorithm }).toString()
+      ),
   });
 }
