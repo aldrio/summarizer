@@ -60,20 +60,28 @@ export function VideoSummary({ summary }: VideoSummaryProps) {
       return;
     }
 
-    const interval = setInterval(() => {
-      const currentTime = videoPlayer.getCurrentTime();
-      const current = summary.summary[index];
-      const endSeconds = current.end + buffer;
+    // because getCurrentTime is not 100% up to date we need to only start polling
+    // after a short delay to ensure previous seekTo's have completed
+    let interval: number | null = null;
+    const timeout = setTimeout(() => {
+      interval = setInterval(() => {
+        const currentTime = videoPlayer.getCurrentTime();
+        const current = summary.summary[index];
+        const endSeconds = current.end + buffer;
 
-      if (currentTime > endSeconds) {
-        if (summary.summary.length - 1 == index) {
-          videoPlayer.stopVideo();
-        } else {
-          setIndex(index + 1);
+        if (currentTime > endSeconds) {
+          if (summary.summary.length - 1 == index) {
+            videoPlayer.stopVideo();
+          } else {
+            setIndex(index + 1);
+          }
         }
-      }
-    }, 10);
-    return () => clearInterval(interval);
+      }, 100);
+    }, 1000);
+    return () => {
+      clearTimeout(timeout);
+      interval && clearInterval(interval);
+    };
   }, [isPlaying, index, videoPlayer, summary.summary]);
 
   return (
