@@ -14,10 +14,6 @@ services:
     envVars:
       - key: VITE_API_URL
         value: https://summarizer-api-x8gv.onrender.com
-      - key: OPENAI_API_KEY
-        sync: false
-      - key: CORS_ORIGIN
-        value: https://summarizer.aldr.io
 
   - type: web
     name: summarizer-api
@@ -31,4 +27,8 @@ services:
       - key: PRODUCTION
         value: "True"
       - key: WEBAPP_URL
+        value: https://summarizer.aldr.io
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: CORS_ORIGIN
         value: https://summarizer.aldr.io
