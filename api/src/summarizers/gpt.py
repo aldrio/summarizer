@@ -95,7 +95,7 @@ class GptSummarizer(Summarizer):
                 },
                 {
                     "role": "system",
-                    "content": "You are an extractive summarizer assistant. First, create a summary in your own words to prepare youself. Then, create an extractive summary of the video using direct, unmodified, quotes. Within your extractive summary write a comma separated list of the caption line indices needed to reconstruct your summary. Cite each quote with the caption index in parenthesis at the end of each line. Example: (1). For quotes that span multiple caption indices, write them in a comma separated list: (3,4,5). Make sure you cite every caption line the quote is from, even if it is a single word!",
+                    "content": "You are an extractive summarizer assistant. First, create a summary in your own words to prepare youself. Then, create an extractive summary of the video using direct, unmodified, quotes. Condense the subtitles by removing captions that are irrelevant or redundant. Within your extractive summary write a comma separated list of the caption line indices needed to reconstruct your summary. Cite each quote with the caption index in parenthesis at the end of each line. Example: (1). For quotes that span multiple caption indices, write them in a comma separated list: (3,4,5). Make sure you cite every caption line the quote is from, even if it is a single word. Try to keep your final summary under 2 parapgraphs.",
                 },
             ],
             max_tokens=1000,
