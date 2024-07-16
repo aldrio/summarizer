@@ -75,13 +75,13 @@ function Index() {
           </p>
         </div>
 
-        <div className="flex flex-col gap-8 items-center mt-20 mb-20 max-w-4xl px-4 w-full">
+        <div className="flex flex-col gap-8 items-center mt-20 mb-20 max-w-xl lg:max-w-4xl px-4 w-full">
           <div className="flex flex-row gap-2 items-center w-full">
             <div className="border-b border-slate-300 grow"></div>
             <div className="text-slate-500 text-sm ">Samples</div>
             <div className="border-b border-slate-300 grow"></div>
           </div>
-          <div className="flex flex-row gap-8 w-full">
+          <div className="flex flex-col lg:flex-row gap-8 w-full">
             <ExampleThumbnail
               title="Inside the Mind of a Master Procrastinator | Tim Urban | TED"
               image={procrastinator}
