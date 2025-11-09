@@ -1,34 +1,38 @@
-services:
-  - type: web
-    name: summarizer-webapp
-    runtime: static
-    rootDir: ./webapp
-    buildCommand: yarn build
-    staticPublishPath: ./dist
-    domains:
-      - summarizer.aldr.io
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /
-    envVars:
-      - key: VITE_API_URL
-        value: https://summarizer-api-x8gv.onrender.com
+projects:
+  - name: Summarizer
+    environments:
+      - name: PRODUCTION
+        services:
+          - type: web
+            name: summarizer-webapp
+            runtime: static
+            rootDir: ./webapp
+            buildCommand: yarn build
+            staticPublishPath: ./dist
+            domains:
+              - summarizer.aldr.io
+            routes:
+              - type: rewrite
+                source: /*
+                destination: /
+            envVars:
+              - key: VITE_API_URL
+                value: https://summarizer-api-x8gv.onrender.com
 
-  - type: web
-    name: summarizer-api
-    runtime: python
-    rootDir: ./api
-    region: ohio
-    buildCommand: poetry install && python ./build.py
-    startCommand: gunicorn --bind 0.0.0.0:8000 wsgi
-    healthCheckPath: /healthz
-    envVars:
-      - key: PRODUCTION
-        value: "True"
-      - key: WEBAPP_URL
-        value: https://summarizer.aldr.io
-      - key: OPENAI_API_KEY
-        sync: false
-      - key: CORS_ORIGIN
-        value: https://summarizer.aldr.io
+          - type: web
+            name: summarizer-api
+            runtime: python
+            rootDir: ./api
+            region: ohio
+            buildCommand: poetry install && python ./build.py
+            startCommand: gunicorn --bind 0.0.0.0:8000 wsgi
+            healthCheckPath: /healthz
+            envVars:
+              - key: PRODUCTION
+                value: "True"
+              - key: WEBAPP_URL
+                value: https://summarizer.aldr.io
+              - key: OPENAI_API_KEY
+                sync: false
+              - key: CORS_ORIGIN
+                value: https://summarizer.aldr.io
