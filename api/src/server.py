@@ -57,7 +57,15 @@ def summarize():
         raise PublicError("Invalid summarization algorithm")
     summarizer = SUMMARIZERS[algorithm_key]
 
-    if re.match(r"^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$", url):
+    video_sites = [
+        r"^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$",
+        r"^(https?\:\/\/)?(www\.vimeo\.com)\/.+$",
+        r"^(https?\:\/\/)?(www\.dailymotion\.com)\/.+$",
+        r"^(https?\:\/\/)?(www\.twitch\.tv)\/.+$",
+        r"^(https?\:\/\/)?(www\.ted\.com)\/talk\/.+$",
+    ]
+
+    if any(re.match(site, url) for site in video_sites):
         data = summarize_video(url, summarizer)
         data["type"] = "video"
     else:
